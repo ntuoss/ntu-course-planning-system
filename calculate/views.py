@@ -8,10 +8,8 @@ from django.views import generic
 from django.views.decorators import csrf
 import os, sys
 from coursearrangement import solve
-from django.contrib.auth import authenticate,login,logout
-from django.contrib.auth.decorators import login_required
-from calculate.models import Myindex,Expectedindex,CourseCode,IndexNumber,Applicant
-from calculate.forms import MyIndexForm,ExpectedIndexForm,ContactForm, SwapForm
+from calculate.models import Applicant
+from calculate.forms import ContactForm,SwapForm
 from coursearrangement.display import writecontent
 from django.core.mail import send_mail, BadHeaderError
 import random
@@ -84,10 +82,6 @@ def search(request):
             content[name] = list[i]
             name = chr(ord(name)+1)
             i = i+1
-
-
-
-
 
         list.reverse()
         answer = solve.allCombination(list,names)
@@ -190,7 +184,7 @@ def matchsuccess(request):
             send_mail("Course Swapping MATCH!",message(name,code,current,expected,result["name"],result["email"]),"ntucourseplanner@gmail.com",[email,])
             send_mail("Course Swapping MATCH!",message(result["name"],code,expected,current,name,email),"ntucourseplanner@gmail.com",[result["email"],])
 
-            #delte ppl from both of the database
+            #delete ppl from both of the database
             p1 = Applicant.objects.get(name=name,code=code,current=current,expected=expected,email=email)
             p1.delete()
             p2 = Applicant.objects.get(id=result["id"])
@@ -251,82 +245,6 @@ def encode_url(str):
 
 def decode_url(str):
     return str.replace('_', ' ')
-
-
-
-
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            # Is the account active? It could have been disabled.
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('/home/')
-            else:
-                return HttpResponse("Your Rango account is disabled.")
-        else:
-            print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
-    else:
-        return render(request,'login.html', {},)
-
-
-
-
-@login_required
-def user_logout(request):
-# Since we know the user is logged in, we can now just log them out.
-    logout(request)
-    # Take the user back to the homepage.
-    return HttpResponseRedirect('/home/')
-
-from calculate.forms import UserForm, UserProfileForm
-def register(request):
-# Like before, get the request's context.
-# A boolean value for telling the template whether the registration was successful.
-    # Set to False initially. Code changes value to True when registration succeeds.
-    registered = False
-    # If it's a HTTP POST, we're interested in processing form data.
-    if request.method == 'POST':
-# Attempt to grab information from the raw form information. # Note that we make use of both UserForm and UserProfileForm.
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
-        # If the two forms are valid...
-        if user_form.is_valid() and profile_form.is_valid():
-        # Save the user's form data to the database.
-            user = user_form.save()
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
-            user.set_password(user.password)
-            user.save()
-        # Now sort out the UserProfile instance.
-        # Since we need to set the user attribute ourselves, we set commit=False.
-        # This delays saving the model until we're ready to avoid integrity problem
-            profile = profile_form.save(commit=False)
-            profile.user = user
-        # Did the user provide a profile picture?
-        # If so, we need to get it from the input form and put it in the UserProfile model.
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-
-            profile.save()
-            registered = True
-        # Invalid form or forms - mistakes or something else? # Print problems to the terminal.
-        # They'll also be shown to the user.
-        else:
-            print(user_form.errors, profile_form.errors)
-
-            # Not a HTTP POST, so we render our form using two ModelForm instances. # These forms will be blank, ready for user input.
-    else:
-        user_form = UserForm()
-        profile_form = UserProfileForm()
-        # Render the template depending on the context.
-    return render(request,'register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
-
 
 def get_coursecode_list(max_results=0, starts_with=''):
     coursecode_list = []
@@ -390,70 +308,3 @@ def coursecode(request,coursecode1_name_url):
         pass
 
     return  render(request,'coursecode.html', context_dict)
-
-
-def myindex(request, myindex_name_url):
-    myindex_name = decode_url(myindex_name_url)
-    context_dict = {'myindex_name': myindex_name, 'myindex_name_url': myindex_name_url}
-
-
-    try:
-        myindex = Myindex.objects.get(index=myindex_name)
-        context_dict['myindex'] = myindex
-        Expectedindexes = Expectedindex.objects.filter(myindex=myindex).order_by('-views')
-        context_dict['expectedindexes'] = Expectedindexes
-    except Myindex.DoesNotExist:
-        pass
-
-    # Go render the response and return it to the client.
-    return render(request,'myindex.html', context_dict)
-
-
-def add_myindex(request):
-    context_dict = {}
-
-    # A HTTP POST?
-    if request.method == 'POST':
-        form = MyIndexForm(request.POST)
-
-        # Have we been provided with a valid form?
-        if form.is_valid():
-            # Save the new myindex to the database.
-            form.save(commit=True)
-            return HttpResponseRedirect('/forum/')
-        else:
-            # The supplied form contained errors - just print them to the terminal.
-            print(form.errors)
-    else:
-        # If the request was not a POST, display the form to enter details.
-        form = MyIndexForm()
-
-    # Bad form (or form details), no form supplied...
-    # Render the form with error messages (if any).
-    context_dict['myindex_form'] = form
-    return render(request,'add_myindex.html', context_dict)
-
-
-def add_expectedindex(request, myindex_name_url):
-
-    context_dict = {}
-
-    myindex_name = decode_url(myindex_name_url)
-    context_dict['myindex_name'] = myindex_name
-    context_dict['myindex_name_url'] = myindex_name_url
-    x = Myindex.objects.get(index=myindex_name)
-    if request.method == 'POST':
-        form = ExpectedIndexForm(request.POST)
-        if form.is_valid():
-            ex = form.save()
-            ex.views = 0
-            ex.myindex.add(x)
-            ex.save()
-            path = '/forum/'+myindex_name_url
-            return HttpResponseRedirect(path)
-        else:
-            print(form.errors)
-    else:
-        form = ExpectedIndexForm()
-    context_dict['form']=form
-    return render(request,'add_expectedindex.html',context_dict)

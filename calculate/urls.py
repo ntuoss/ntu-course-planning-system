@@ -1,27 +1,15 @@
 
-from django.conf.urls import url
-from django.conf.urls import url
+from django.urls import path
 from . import views
 
 urlpatterns = [
-    url(r'^home/$',views.mainpage,name='home'),
-    url(r'^contact/$',views.contact,name='contact'),
-    url(r'^contact/success/$',views.successView,name='success'),
-    url(r'^timetable/$',views.timetable,name='timetable'),
-    url(r'^timetable/search/$', views.search,name='search'),
-    url(r'^forum/$',views.temp,name='temp'),
-    url(r'^forum/match$',views.matchsuccess,name='match'),
-    url(r'^forum/nomatch$',views.nomatch,name='nomatch'),
+    path('home/',views.mainpage,name='home'),
+    path('contact/',views.contact,name='contact'),
+    path('contact/success/',views.successView,name='success'),
+    path('timetable/',views.timetable,name='timetable'),
+    path('timetable/search/', views.search,name='search'),
+    path('forum/',views.temp,name='temp'),
+    path('forum/match',views.matchsuccess,name='match'),
+    path('forum/nomatch',views.nomatch,name='nomatch'),
 
-    url(r'^login/$',views.user_login,name='login'),
-    url(r'^logout/$', views.user_logout, name='logout'),
-    url(r'^register/$', views.register, name='register'),
-    url(r'^forum/(?P<coursecode1_name_url>\w+)/$', views.coursecode, name='coursecode'),
-    url(r'^add_myindex/$', views.add_myindex, name='add_myindex'),
-    #url(r'^forum/$',views.forum,name='forum'),
-    #url(r'^forum/(?P<myindex_name_url>\w+)/$', views.myindex, name='myindex'),
-
-
-    #url(r'^forum/(?P<myindex_name_url>\w+)/add_expectedindex/$', views.add_expectedindex, name='add_expectedindex'),
-    #url(r'^/forum/(?P<myindex_name_url>\w+)/(?P<expectedindex_name_url>\w+)/$', views.expectedindex, name='expectedindex'),
-]
+   ]

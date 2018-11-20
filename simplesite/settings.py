@@ -52,7 +52,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'simplesite.urls'
 
-TEMPLATES_PATH = os.path.join(BASE_DIR, 'templetes')
+TEMPLATES_PATH = os.path.join(BASE_DIR, 'templates')
 
 TEMPLATES = [
     {
