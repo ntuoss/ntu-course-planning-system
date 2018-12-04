@@ -768,15 +768,15 @@ input.pcl:-ms-input-placeholder {
 .media-left {
     padding-right: 30px
 }
-#bg_video {
-    position: absolute;
-    min-width: 100%;
-    left: 0;
-    top: 0;
-    min-height: 100%;
-    background: transparent url('video/poster.jpg') no-repeat 0 0;
-    background-size: cover;
-}
+/*#bg_video {*/
+    /*position: absolute;*/
+    /*min-width: 100%;*/
+    /*left: 0;*/
+    /*top: 0;*/
+    /*min-height: 100%;*/
+    /*background: transparent url('video/poster.jpg') no-repeat 0 0;*/
+    /*background-size: cover;*/
+/*}*/
 .control {
     width: 120px;
     height: 120px;
@@ -2405,11 +2405,11 @@ header .intro-text .intro-lead-in {
 }
 
 /* form starting stylings ------------------------------- */
-.group 			  {
+.group-forum 			  {
   position:relative;
   margin-bottom:45px;
 }
-input 				{
+.group-forum input 				{
   font-size:18px;
   padding:10px 10px 10px 5px;
   display:block;
@@ -2417,10 +2417,10 @@ input 				{
   border:none;
   border-bottom:1px solid #757575;
 }
-input:focus 		{ outline:none; }
+.group-forum input:focus 		{ outline:none; }
 
 /* LABEL ======================================= */
-label 				 {
+.group-forum label 				 {
   color:#999;
   font-size:18px;
   font-weight:normal;
@@ -2434,15 +2434,15 @@ label 				 {
 }
 
 /* active state */
-input:focus ~ label, input:valid ~ label 		{
+.group-forum input:focus ~ label, input:valid ~ label 		{
   top:-20px;
   font-size:14px;
   color:#5264AE;
 }
 
 /* BOTTOM BARS ================================= */
-.bar 	{ position:relative; display:block; width:300px; }
-.bar:before, .bar:after 	{
+.group-forum .bar 	{ position:relative; display:block; width:300px; }
+.group-forum .bar:before, .bar:after 	{
   content:'';
   height:2px;
   width:0;
@@ -2453,20 +2453,20 @@ input:focus ~ label, input:valid ~ label 		{
   -moz-transition:0.2s ease all;
   -webkit-transition:0.2s ease all;
 }
-.bar:before {
+.group-forum .bar:before {
   left:50%;
 }
-.bar:after {
+.group-forum .bar:after {
   right:50%;
 }
 
 /* active state */
-input:focus ~ .bar:before, input:focus ~ .bar:after {
+.group-forum input:focus ~ .bar:before, input:focus ~ .bar:after {
   width:50%;
 }
 
 /* HIGHLIGHTER ================================== */
-.highlight {
+.group-forum .highlight {
   position:absolute;
   height:60%;
   width:100px;
@@ -2477,7 +2477,7 @@ input:focus ~ .bar:before, input:focus ~ .bar:after {
 }
 
 /* active state */
-input:focus ~ .highlight {
+.group-forum input:focus ~ .highlight {
   -webkit-animation:inputHighlighter 0.3s ease;
   -moz-animation:inputHighlighter 0.3s ease;
   animation:inputHighlighter 0.3s ease;

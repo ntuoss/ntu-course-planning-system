@@ -49,19 +49,19 @@
                         {% csrf_token %}
 {#                    {% if form %}#}
                         {% for field in form %}
-                            <div class="group">
+                            <div class="group-forum">
     {#                              <input type="text" required>#}
                                 {{ field.as_text }}
     {#                            <span class="highlight"></span>#}
     {#                            <span class="bar"></span>#}
-                                <label>{{ field.label }}</label>
+                                <label class="forum">{{ field.label }}</label>
                             </div>
                         {% endfor %}
 {#                    {% else %}#}
 {#                        <p>test</p>#}
 {#                    {% endif %}#}
     {#                    {{form.as_p}}#}
-                        <input type="submit" class="btn btn-primary" value="Submit">
+                        <input type="submit" class="btn btn-primary forum" value="Submit">
                     </form>
                 </div>
             {% endblock %}
