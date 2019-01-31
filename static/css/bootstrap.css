@@ -2008,7 +2008,7 @@ textarea.form-control {
 .checkbox input[type="checkbox"],
 .checkbox-inline input[type="checkbox"] {
   float: left;
-  margin-left: -20px;
+  /*margin-left: -20px;*/
 }
 
 .radio + .radio,
